@@ -1,14 +1,14 @@
 using NUnit.Framework;
 
 namespace CheckoutOrderTotalTests {
-    public class Tests {
+    public class GroceryItemConfigTests {
         /*
          * Understanding Requirements:
          * 
          * Goal: To calculate pre-tax total price as items are scanned in
          * 
          * Memory-based
-         * Structured as logical function calls all working together - Most likely a class to hold items in checkout
+         * Structured as logical function calls all working together - Most likely a class to hold/manage items in checkout
          * 
          * Classifications
          * 
@@ -24,15 +24,21 @@ namespace CheckoutOrderTotalTests {
          * Accept scanned item (and weight... Add item)
          * Accept markdowns (discount price) as well as specials optionally with limits (Get N items get M at % off, N for $X, Get N, get M of equal/lesser value for % off weighted items)
          * Remove scanned items (Can affect special price so a check is needed)
+         * Configure pricing before item is scanned
          */
 
-        [SetUp]
-        public void Setup() {
-        }
-
+        // Before even adding the items, we need a way to configure pricing on existing items and also restrict items scanned to items that are configured to have prices
         [Test]
-        public void Test1() {
-            Assert.Pass();
+        public void AddingConfiguredItemProvidesCorrectTotal() {
+            CheckoutOrderManager checkoutManager = new CheckoutOrderManager();
+
+            // Configure item
+            string groceryItem = "beef";
+            checkoutManager.ConfigurePricing(groceryItem, 5.87);
+            
+            //Test that scanning an item goes through and reads in our price we set
+            Assert.True(checkoutManager.ScanItem(groceryItem));
+            Assert.AreEqual(5.87, checkoutManager.GetCurrentTotal());
         }
     }
 }

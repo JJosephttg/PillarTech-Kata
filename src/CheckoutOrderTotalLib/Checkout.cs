@@ -1,6 +1,6 @@
 ﻿using System;
 
 namespace CheckoutOrderTotalLib {
-    public class Class1 {
+    public class Checkout {
     }
 }
