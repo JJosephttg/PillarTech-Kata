@@ -10,7 +10,8 @@ namespace CheckoutOrderTotalTests {
         public void ConfiguringItemProvidesCorrectTotalWhenAdded(string groceryItem, double unitPrice) {
             var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
             
-            Assert.True(checkoutManager.ScanItem(groceryItem));
+            checkoutManager.ScanItem(groceryItem);
+
             Assert.AreEqual(unitPrice, checkoutManager.GetTotalPrice());
         }
 
@@ -20,7 +21,8 @@ namespace CheckoutOrderTotalTests {
         public void ConfiguringWeightedItemProvidesCorrectTotalWhenAdded(string groceryItem, double unitPrice, double weight) {
             var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
             
-            Assert.True(checkoutManager.ScanItem(groceryItem, weight));
+            checkoutManager.ScanItem(groceryItem, weight);
+
             Assert.AreEqual(unitPrice * weight, checkoutManager.GetTotalPrice());
         }
         #endregion
@@ -31,6 +33,29 @@ namespace CheckoutOrderTotalTests {
             var checkoutManager = SetupCheckoutManager("milk", 5.27);
 
             Assert.False(checkoutManager.ScanItem("yogurt"));
+            Assert.AreEqual(0, checkoutManager.GetTotalPrice());
+        }
+        #endregion
+
+        #region RemoveScannedItem
+        [Test]
+        [TestCase("Yummy Pretzels", 200)]
+        public void RemovingItemUpdatesCorrectTotal(string groceryItem, double unitPrice) {
+            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
+
+            for(int i = 0; i < 2; i++) checkoutManager.ScanItem(groceryItem);
+            checkoutManager.RemoveScannedItem(groceryItem);
+
+            Assert.AreEqual(unitPrice, checkoutManager.GetTotalPrice());
+        }
+
+        [Test]
+        [TestCase("Yum yum yuummoooo", 150)]
+        public void RemovingNonExistentItemDoesNotInvalidateTotal(string groceryItem, double unitPrice) {
+            var checkoutManager = new CheckoutOrderManager();
+
+            checkoutManager.RemoveScannedItem(groceryItem);
+
             Assert.AreEqual(0, checkoutManager.GetTotalPrice());
         }
         #endregion
