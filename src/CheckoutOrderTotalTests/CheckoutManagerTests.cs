@@ -37,7 +37,7 @@ namespace CheckoutOrderTotalTests {
         }
         #endregion
 
-        #region RemoveScannedItem
+        #region RemoveScannedItem Tests
         [Test]
         [TestCase("Yummy Pretzels", 200)]
         public void RemovingItemUpdatesCorrectTotal(string groceryItem, double unitPrice) {
@@ -50,13 +50,26 @@ namespace CheckoutOrderTotalTests {
         }
 
         [Test]
-        [TestCase("Yum yum yuummoooo", 150)]
-        public void RemovingNonExistentItemDoesNotInvalidateTotal(string groceryItem, double unitPrice) {
+        [TestCase("Yum yum yuummoooo")]
+        public void RemovingNonExistentItemDoesNotInvalidateTotal(string groceryItem) {
             var checkoutManager = new CheckoutOrderManager();
 
             checkoutManager.RemoveScannedItem(groceryItem);
 
             Assert.AreEqual(0, checkoutManager.GetTotalPrice());
+        }
+        #endregion
+
+        #region SetMarkdown Tests
+        [Test]
+        [TestCase("Candy", 7.49, .15)]
+        public void SettingMarkdownReflectsCorrectTotalWhenAdded(string groceryItem, double unitPrice, double markdown) {
+            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
+
+            checkoutManager.ScanItem(groceryItem);
+            checkoutManager.SetMarkdown(groceryItem, markdown);
+
+            Assert.AreEqual(unitPrice - markdown, checkoutManager.GetTotalPrice());
         }
         #endregion
 
