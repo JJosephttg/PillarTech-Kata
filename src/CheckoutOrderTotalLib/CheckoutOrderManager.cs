@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 
 namespace CheckoutOrderTotalLib {
+   /* Expected API Calls:
+    * SetProductUnitPrice(item, price)
+    * SetMarkDown(item, unitpriceAmtTakenOff)
+    * SetSpecial(item, specialType, limitAmt)
+    * ScanItem(item, weight = 1)
+    * GetTotalPrice()
+    * RemoveProduct(item)
+    */
     public class CheckoutOrderManager {
         Dictionary<string, double> _groceryPriceMap = new Dictionary<string, double>();
         List<GroceryItemOrder> _checkoutOrder = new List<GroceryItemOrder>();
 
-        public void ConfigureItemPrice(string groceryItem, double price) {
+        public void SetProductUnitPrice(string groceryItem, double price) {
             _groceryPriceMap[groceryItem] = price;
         }
 
@@ -18,6 +26,6 @@ namespace CheckoutOrderTotalLib {
             return false;
         }
 
-        public double GetCurrentTotal() { return _checkoutOrder.Sum(x => x.Price); }
+        public double GetTotalPrice() { return _checkoutOrder.Sum(x => x.Price); }
     }
 }
