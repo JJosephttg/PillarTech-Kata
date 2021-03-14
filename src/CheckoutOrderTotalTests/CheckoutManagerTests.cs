@@ -19,6 +19,16 @@ namespace CheckoutOrderTotalTests {
         }
         #endregion
 
-        
+        #region ScanItem Tests
+        [Test]
+        public void AddingItemNotConfiguredDoesNotScanItem() {
+            CheckoutOrderManager checkoutManager = new CheckoutOrderManager();
+
+            checkoutManager.ConfigureItemPrice("milk", 5.27);
+
+            Assert.False(checkoutManager.ScanItem("yogurt"));
+            Assert.AreEqual(0, checkoutManager.GetCurrentTotal());
+        }
+        #endregion
     }
 }
