@@ -4,7 +4,6 @@ Checkout Order Total Kata - Done in C#
 <br/><br/>
 
 ## Building/Running/Testing
-<hr/>
 
 1. First, clone the repository to a path of your choosing
 
