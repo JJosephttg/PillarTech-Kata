@@ -1,3 +1,4 @@
+using CheckoutOrderTotalLib;
 using NUnit.Framework;
 
 namespace CheckoutOrderTotalTests {
@@ -22,7 +23,7 @@ namespace CheckoutOrderTotalTests {
          *  
          * Functional Requirements:
          * Accept scanned item (and weight... Add item)
-         * Accept markdowns (discount price) as well as specials optionally with limits (Get N items get M at % off, N for $X, Get N, get M of equal/lesser value for % off weighted items)
+         * Accept markdowns (discount price) as well as specials optionally with limits (Get N items get M at % off, N for $X, Get N, get M of equal/lesser value for % off weighted items) - Quantity seems needed in this case
          * Remove scanned items (Can affect special price so a check is needed)
          * Configure pricing before item is scanned
          */
@@ -34,7 +35,7 @@ namespace CheckoutOrderTotalTests {
 
             // Configure item
             string groceryItem = "beef";
-            checkoutManager.ConfigurePricing(groceryItem, 5.87);
+            checkoutManager.ConfigureItemPrice(groceryItem, 5.87);
             
             //Test that scanning an item goes through and reads in our price we set
             Assert.True(checkoutManager.ScanItem(groceryItem));
