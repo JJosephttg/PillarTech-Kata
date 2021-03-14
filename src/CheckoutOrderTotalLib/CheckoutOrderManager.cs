@@ -18,9 +18,9 @@ namespace CheckoutOrderTotalLib {
             _groceryPriceMap[groceryItem] = price;
         }
 
-        public bool ScanItem(string groceryItem) {
+        public bool ScanItem(string groceryItem, double weightOrQty = 1) {
             if (_groceryPriceMap.TryGetValue(groceryItem, out double price)) {
-                _checkoutOrder.Add(new GroceryItemOrder(groceryItem, price));
+                _checkoutOrder.Add(new GroceryItemOrder(groceryItem, price * weightOrQty));
                 return true;
             }
             return false;

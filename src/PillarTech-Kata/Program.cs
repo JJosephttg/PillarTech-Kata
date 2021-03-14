@@ -21,7 +21,7 @@ namespace PillarTech_Kata {
          * Different types as described in Functional Requirements
          *  
          * Functional Requirements:
-         * Accept scanned item (and weight... Add item)
+         * *Accept scanned item (and weight... Add item)
          * Accept markdowns (discount price) as well as specials optionally with limits (Get N items get M at % off, N for $X, Get N, get M of equal/lesser value for % off weighted items) - Quantity seems needed in this case
          * Remove scanned items (Can affect special price so a check is needed)
          * *Configure pricing before item is scanned
