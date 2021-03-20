@@ -4,13 +4,11 @@ using NUnit.Framework;
 namespace CheckoutOrderTotalTests {
     public class CheckoutManagerTests {
 
-        #region ConfigureItemPrice Tests
+        #region AddItem Tests
         [Test]
         [TestCase("beef", 5.87)]
         public void ConfiguringItemProvidesCorrectTotalWhenAdded(string groceryItem, double unitPrice) {
-            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
-            
-            checkoutManager.ScanItem(groceryItem);
+            var checkoutManager = SetupAndScan(groceryItem, unitPrice);
 
             Assert.AreEqual(unitPrice, checkoutManager.GetTotalPrice());
         }
@@ -19,9 +17,7 @@ namespace CheckoutOrderTotalTests {
         [TestCase("rice", 8.3, 2.5)]
         //For weighted items, seems like it is similar to per-unit because it is per-unit of the item, but represented as a different standard like pounds or ounces
         public void ConfiguringWeightedItemProvidesCorrectTotalWhenAdded(string groceryItem, double unitPrice, double weight) {
-            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
-            
-            checkoutManager.ScanItem(groceryItem, weight);
+            var checkoutManager = SetupAndScan(groceryItem, unitPrice, weight);
 
             Assert.AreEqual(unitPrice * weight, checkoutManager.GetTotalPrice());
         }
@@ -41,9 +37,7 @@ namespace CheckoutOrderTotalTests {
         [Test]
         [TestCase("Yummy Pretzels", 200)]
         public void RemovingItemUpdatesCorrectTotal(string groceryItem, double unitPrice) {
-            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
-
-            for(int i = 0; i < 2; i++) checkoutManager.ScanItem(groceryItem);
+            var checkoutManager = SetupAndScan(groceryItem, unitPrice, 2);
             checkoutManager.RemoveScannedItem(groceryItem);
 
             Assert.AreEqual(unitPrice, checkoutManager.GetTotalPrice());
@@ -64,9 +58,7 @@ namespace CheckoutOrderTotalTests {
         [Test]
         [TestCase("Candy", 7.49, .15)]
         public void SettingMarkdownReflectsCorrectTotalWhenAdded(string groceryItem, double unitPrice, double markdown) {
-            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
-
-            checkoutManager.ScanItem(groceryItem);
+            var checkoutManager = SetupAndScan(groceryItem, unitPrice);
             checkoutManager.SetMarkdown(groceryItem, markdown);
 
             Assert.AreEqual(unitPrice - markdown, checkoutManager.GetTotalPrice());
@@ -75,7 +67,13 @@ namespace CheckoutOrderTotalTests {
 
         private CheckoutOrderManager SetupCheckoutManager(string groceryItem, double unitPrice) {
             var checkoutManager = new CheckoutOrderManager();
-            checkoutManager.SetProductUnitPrice(groceryItem, unitPrice);
+            checkoutManager.AddItem(groceryItem, unitPrice);
+            return checkoutManager;
+        }
+
+        private CheckoutOrderManager SetupAndScan(string groceryItem, double unitPrice, double quantity = 1) {
+            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
+            checkoutManager.ScanItem(groceryItem, quantity);
             return checkoutManager;
         }
     }

@@ -16,16 +16,34 @@ namespace CheckoutOrderTotalLib {
         Dictionary<string, GroceryItem> _groceryPriceMap = new Dictionary<string, GroceryItem>();
         HashSet<GroceryItem> _checkoutOrder = new HashSet<GroceryItem>();
 
-        public void SetProductUnitPrice(string itemId, double price) {
-            var groceryItem = TryGetOrAdd(_groceryPriceMap, itemId, new GroceryItem());
+        /// <summary>
+        /// Adds specified identifier to scannable items using the base price
+        /// </summary>
+        /// <param name="itemId">Grocery item identifier</param>
+        /// <param name="price">Base unit price</param>
+        public void AddItem(string itemId, double price) {
+            if (!_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) _groceryPriceMap.Add(itemId, groceryItem = new GroceryItem());
             groceryItem.UnitPrice = price;
         }
 
-        public void SetMarkdown(string itemId, double markdown) {
-            var groceryItem = TryGetOrAdd(_groceryPriceMap, itemId, new GroceryItem());
+        /// <summary>
+        /// Sets a markdown of an existing grocery item
+        /// </summary>
+        /// <param name="itemId">Grocery item identifier</param>
+        /// <param name="markdown">price of markdown (How much to take off of price)</param>
+        /// <returns>True if markdown is set and false if the item base price has not been configured yet</returns>
+        public bool SetMarkdown(string itemId, double markdown) {
+            if (!_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) return false;
             groceryItem.MarkDownPrice = markdown;
+            return true;
         }
 
+        /// <summary>
+        /// Adds grocery item and quantity to checkout
+        /// </summary>
+        /// <param name="itemId">Grocery item identifier</param>
+        /// <param name="weightOrQty">weight or quantity to add</param>
+        /// <returns>True if item is scanned, and false if item is not a valid/configured grocery item. Items can be configured beforehand with the SetProductUnitPrice method</returns>
         public bool ScanItem(string itemId, double weightOrQty = 1) {
             if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem gItem)) {
                 _checkoutOrder.Add(gItem);
@@ -36,6 +54,10 @@ namespace CheckoutOrderTotalLib {
             return false;
         }
 
+        /// <summary>
+        /// Removes grocery item from checkout
+        /// </summary>
+        /// <param name="itemId">Grocery item identifier</param>
         public void RemoveScannedItem(string itemId) {
             if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) {
                 var quantity = groceryItem.OrderQuantity;
@@ -47,11 +69,10 @@ namespace CheckoutOrderTotalLib {
             }    
         }
 
+        /// <summary>
+        /// Calculates total pre-tax price of all current checkout items
+        /// </summary>
+        /// <returns>Total pre-tax price of current checkout items</returns>
         public double GetTotalPrice() => _checkoutOrder.Sum(x => x.GetAdjustedPrice());
-
-        private V TryGetOrAdd<K, V>(Dictionary<K, V> map, K key, V newVal) {
-            if (!map.TryGetValue(key, out V val)) map.Add(key, val = newVal);
-            return val;
-        }
     }
 }
