@@ -1,14 +1,11 @@
-using CheckoutOrderTotalLib;
+﻿using CheckoutOrderTotalLib;
 using NUnit.Framework;
 using System;
 
 namespace CheckoutOrderTotalTests {
-    public class CheckoutManagerTests {
-
-        private const string C_DefaultItem = "Can of Hello World Beans";
-
+    public class GroceryItemConfigTests : GroceryPOSSystemTestBase {
         [TestFixture]
-        public class AddItemTests : CheckoutManagerTests {            
+        public class AddItemTests : GroceryPOSSystemTestBase {
             [Test]
             [TestCase("beef", 5.87)]
             public void ConfiguringItemProvidesCorrectTotalWhenAdded(string groceryItem, double unitPrice) {
@@ -25,46 +22,9 @@ namespace CheckoutOrderTotalTests {
                 Assert.AreEqual(unitPrice * weight, checkoutManager.GetTotalPrice());
             }
         }
-        
 
         [TestFixture]
-        public class ScanItemTests : CheckoutManagerTests {
-            [Test]
-            public void AddingItemNotConfiguredDoesNotScanItem() {
-                var checkoutManager = SetupCheckoutManager("milk", 5.27);
-
-                Assert.False(checkoutManager.ScanItem("yogurt"));
-                Assert.AreEqual(0, checkoutManager.GetTotalPrice());
-            }
-        }
-        
-        [TestFixture]
-        public class RemoveScannedItemTests : CheckoutManagerTests {
-            [Test]
-            [TestCase("Yummy Pretzels", 200)]
-            [TestCase("helloworld beans", 20)]
-            [TestCase("groceries", 72.32)]
-            public void RemovingItemUpdatesCorrectTotal(string groceryItem, double unitPrice) {
-                var checkoutManager = SetupAndScan(groceryItem, unitPrice, 2);
-                checkoutManager.AddScannableItem(C_DefaultItem, 50);
-                checkoutManager.ScanItem(C_DefaultItem);
-                checkoutManager.RemoveScannedItem(groceryItem);
-
-                Assert.AreEqual(50, checkoutManager.GetTotalPrice());
-            }
-
-            [Test]
-            public void RemovingNonExistentItemDoesNotInvalidateTotal() {
-                var checkoutManager = new GroceryPOSSystem();
-
-                checkoutManager.RemoveScannedItem(C_DefaultItem);
-
-                Assert.AreEqual(0, checkoutManager.GetTotalPrice());
-            }
-        }
-
-        [TestFixture]
-        public class SetMarkdownTests : CheckoutManagerTests {
+        public class SetMarkdownTests : GroceryPOSSystemTestBase {
             [Test]
             [TestCase("Candy", 7.49, .15)]
             public void SettingMarkdownReflectsCorrectTotalWhenAdded(string groceryItem, double unitPrice, double markdown) {
@@ -104,8 +64,9 @@ namespace CheckoutOrderTotalTests {
         }
 
         [TestFixture]
-        public class SetSpecialTests : CheckoutManagerTests {
+        public class SetSpecialTests : GroceryPOSSystemTestBase {
             private const double C_DefaultUnitPrice = 50;
+
             [Test]
             [TestCase(1, 1, 100, 50)]
             [TestCase(2, 1, 50, 125)]
@@ -115,19 +76,5 @@ namespace CheckoutOrderTotalTests {
                 Assert.AreEqual(expectedTotal, checkoutManager.GetTotalPrice());
             }
         }
-
-        #region Misc Methods
-        private GroceryPOSSystem SetupCheckoutManager(string groceryItem, double unitPrice) {
-            var checkoutManager = new GroceryPOSSystem();
-            checkoutManager.AddScannableItem(groceryItem, unitPrice);
-            return checkoutManager;
-        }
-
-        private GroceryPOSSystem SetupAndScan(string groceryItem, double unitPrice, double quantity = 1) {
-            var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
-            checkoutManager.ScanItem(groceryItem, quantity);
-            return checkoutManager;
-        }
-        #endregion
     }
 }
