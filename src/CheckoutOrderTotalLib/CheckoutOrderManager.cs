@@ -33,6 +33,7 @@ namespace CheckoutOrderTotalLib {
         /// <param name="markdown">price of markdown (How much to take off of price)</param>
         /// <returns>True if markdown is set and false if the item base price has not been configured yet</returns>
         public bool SetMarkdown(string itemId, double markdown) {
+            if (markdown < 0) throw new ArgumentOutOfRangeException("markdown", "Markdown cannot be a negative number");
             if (!_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) return false;
             groceryItem.MarkDownPrice = markdown;
             return true;
