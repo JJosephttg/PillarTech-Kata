@@ -19,7 +19,6 @@ namespace CheckoutOrderTotalTests {
 
             [Test]
             [TestCase("rice", 8.3, 2.5)]
-            //For weighted items, seems like it is similar to per-unit because it is per-unit of the item, but represented as a different standard like pounds or ounces
             public void ConfiguringWeightedItemProvidesCorrectTotalWhenAdded(string groceryItem, double unitPrice, double weight) {
                 var checkoutManager = SetupAndScan(groceryItem, unitPrice, weight);
 
@@ -43,11 +42,15 @@ namespace CheckoutOrderTotalTests {
         public class RemoveScannedItemTests : CheckoutManagerTests {
             [Test]
             [TestCase("Yummy Pretzels", 200)]
+            [TestCase("helloworld beans", 20)]
+            [TestCase("groceries", 72.32)]
             public void RemovingItemUpdatesCorrectTotal(string groceryItem, double unitPrice) {
                 var checkoutManager = SetupAndScan(groceryItem, unitPrice, 2);
+                checkoutManager.AddScannableItem("notgoingtoremove", 50);
+                checkoutManager.ScanItem("notgoingtoremove");
                 checkoutManager.RemoveScannedItem(groceryItem);
 
-                Assert.AreEqual(unitPrice, checkoutManager.GetTotalPrice());
+                Assert.AreEqual(50, checkoutManager.GetTotalPrice());
             }
 
             [Test]
@@ -101,9 +104,10 @@ namespace CheckoutOrderTotalTests {
             }
         }
 
+        #region Misc Methods
         private CheckoutOrderManager SetupCheckoutManager(string groceryItem, double unitPrice) {
             var checkoutManager = new CheckoutOrderManager();
-            checkoutManager.AddItem(groceryItem, unitPrice);
+            checkoutManager.AddScannableItem(groceryItem, unitPrice);
             return checkoutManager;
         }
 
@@ -112,5 +116,6 @@ namespace CheckoutOrderTotalTests {
             checkoutManager.ScanItem(groceryItem, quantity);
             return checkoutManager;
         }
+        #endregion
     }
 }

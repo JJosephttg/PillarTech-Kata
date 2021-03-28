@@ -21,7 +21,7 @@ namespace CheckoutOrderTotalLib {
         /// </summary>
         /// <param name="itemId">Grocery item identifier</param>
         /// <param name="price">Base unit price</param>
-        public void AddItem(string itemId, double price) {
+        public void AddScannableItem(string itemId, double price) {
             if (!_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) _groceryPriceMap.Add(itemId, groceryItem = new GroceryItem());
             groceryItem.UnitPrice = price;
         }
@@ -62,14 +62,7 @@ namespace CheckoutOrderTotalLib {
         /// </summary>
         /// <param name="itemId">Grocery item identifier</param>
         public void RemoveScannedItem(string itemId) {
-            if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) {
-                var quantity = groceryItem.OrderQuantity;
-                quantity = quantity - 1 <= 0 ? 0 : --quantity;
-
-                if (quantity <= 0) _checkoutOrder.Remove(groceryItem); //Remove if exists in checkout order since customer is not ordering this item any more
-                
-                groceryItem.OrderQuantity = quantity;
-            }    
+            if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) _checkoutOrder.Remove(groceryItem);
         }
 
         /// <summary>
