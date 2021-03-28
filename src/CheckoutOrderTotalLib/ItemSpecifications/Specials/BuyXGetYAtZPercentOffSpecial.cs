@@ -26,10 +26,5 @@
             }
             return new SpecialResult(total, qtyLeft);
         }
-
-        //For example:
-        //buy 3 get 2 at 50%
-        //buy 3 get 4 at 50%
-        //order of 6
     }
 }

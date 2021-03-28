@@ -55,7 +55,7 @@ namespace CheckoutOrderTotalTests {
 
             [Test]
             public void RemovingNonExistentItemDoesNotInvalidateTotal() {
-                var checkoutManager = new CheckoutOrderManager();
+                var checkoutManager = new GroceryPOSSystem();
 
                 checkoutManager.RemoveScannedItem(C_DefaultItem);
 
@@ -94,7 +94,7 @@ namespace CheckoutOrderTotalTests {
             [TestCase("Green Beans")]
             [TestCase("")]
             public void SettingMarkdownOnNonConfiguredItemThrowsException(string itemId) {
-                AssertExceptionParam<ArgumentException>(() => new CheckoutOrderManager().SetMarkdown(itemId, 5.23), "itemId");
+                AssertExceptionParam<ArgumentException>(() => new GroceryPOSSystem().SetMarkdown(itemId, 5.23), "itemId");
             }
 
             private void AssertExceptionParam<T>(TestDelegate method, string paramName) where T : ArgumentException {
@@ -117,13 +117,13 @@ namespace CheckoutOrderTotalTests {
         }
 
         #region Misc Methods
-        private CheckoutOrderManager SetupCheckoutManager(string groceryItem, double unitPrice) {
-            var checkoutManager = new CheckoutOrderManager();
+        private GroceryPOSSystem SetupCheckoutManager(string groceryItem, double unitPrice) {
+            var checkoutManager = new GroceryPOSSystem();
             checkoutManager.AddScannableItem(groceryItem, unitPrice);
             return checkoutManager;
         }
 
-        private CheckoutOrderManager SetupAndScan(string groceryItem, double unitPrice, double quantity = 1) {
+        private GroceryPOSSystem SetupAndScan(string groceryItem, double unitPrice, double quantity = 1) {
             var checkoutManager = SetupCheckoutManager(groceryItem, unitPrice);
             checkoutManager.ScanItem(groceryItem, quantity);
             return checkoutManager;
