@@ -65,8 +65,6 @@ namespace CheckoutOrderTotalTests {
 
         [TestFixture]
         public class SetSpecialTests : GroceryPOSSystemTestBase {
-            private const double C_DefaultUnitPrice = 50;
-
             [Test]
             [TestCase(1, 1, 100, 50)]
             [TestCase(2, 1, 50, 125)]

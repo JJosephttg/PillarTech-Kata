@@ -1,10 +1,10 @@
 using CheckoutOrderTotalLib;
-using NUnit.Framework;
 
 namespace CheckoutOrderTotalTests {
     public abstract class GroceryPOSSystemTestBase {
 
         protected const string C_DefaultItem = "Can of Hello World Beans";
+        protected const double C_DefaultUnitPrice = 50;
 
         #region Misc Methods
         protected GroceryPOSSystem SetupCheckoutManager(string groceryItem, double unitPrice) {
