@@ -1,5 +1,6 @@
 using CheckoutOrderTotalLib;
 using NUnit.Framework;
+using System;
 
 namespace CheckoutOrderTotalTests {
     public class CheckoutManagerTests {
@@ -62,6 +63,19 @@ namespace CheckoutOrderTotalTests {
             checkoutManager.SetMarkdown(groceryItem, markdown);
 
             Assert.AreEqual(unitPrice - markdown, checkoutManager.GetTotalPrice());
+        }
+
+        [Test]
+        [TestCase(-1)]
+        [TestCase(-5.23)]
+        [TestCase(-.01)]
+        [TestCase(-1928.84)]
+        [TestCase(double.NegativeInfinity)]
+        public void SettingNegativeMarkdownThrowsException(double markdownPrice) {
+            var groceryItem = "Green beans";
+            var checkoutManager = SetupAndScan(groceryItem, 5);
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => checkoutManager.SetMarkdown(groceryItem, markdownPrice));
+            Assert.Equals(exception.ParamName, "markdown");
         }
         #endregion
 
