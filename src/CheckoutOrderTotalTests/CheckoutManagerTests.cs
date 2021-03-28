@@ -75,7 +75,7 @@ namespace CheckoutOrderTotalTests {
             var groceryItem = "Green beans";
             var checkoutManager = SetupAndScan(groceryItem, 5);
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() => checkoutManager.SetMarkdown(groceryItem, markdownPrice));
-            Assert.Equals(exception.ParamName, "markdown");
+            Assert.AreEqual(exception.ParamName, "markdown");
         }
         #endregion
 
