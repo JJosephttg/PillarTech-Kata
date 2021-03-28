@@ -46,19 +46,18 @@ namespace CheckoutOrderTotalTests {
             [TestCase("groceries", 72.32)]
             public void RemovingItemUpdatesCorrectTotal(string groceryItem, double unitPrice) {
                 var checkoutManager = SetupAndScan(groceryItem, unitPrice, 2);
-                checkoutManager.AddScannableItem("notgoingtoremove", 50);
-                checkoutManager.ScanItem("notgoingtoremove");
+                checkoutManager.AddScannableItem(C_DefaultItem, 50);
+                checkoutManager.ScanItem(C_DefaultItem);
                 checkoutManager.RemoveScannedItem(groceryItem);
 
                 Assert.AreEqual(50, checkoutManager.GetTotalPrice());
             }
 
             [Test]
-            [TestCase("Yum yum yuummoooo")]
-            public void RemovingNonExistentItemDoesNotInvalidateTotal(string groceryItem) {
+            public void RemovingNonExistentItemDoesNotInvalidateTotal() {
                 var checkoutManager = new CheckoutOrderManager();
 
-                checkoutManager.RemoveScannedItem(groceryItem);
+                checkoutManager.RemoveScannedItem(C_DefaultItem);
 
                 Assert.AreEqual(0, checkoutManager.GetTotalPrice());
             }
@@ -101,6 +100,19 @@ namespace CheckoutOrderTotalTests {
             private void AssertExceptionParam<T>(TestDelegate method, string paramName) where T : ArgumentException {
                 var exception = Assert.Throws<T>(method);
                 Assert.AreEqual(exception.ParamName, paramName);
+            }
+        }
+
+        [TestFixture]
+        public class SetSpecialTests : CheckoutManagerTests {
+            private const double C_DefaultUnitPrice = 50;
+            [Test]
+            [TestCase(1, 1, 100, 50)]
+            [TestCase(2, 1, 50, 125)]
+            public void BuyXGetYAtZPercentOffSpecialReflectsCorrectTotal(double qualifiedQty, double discountedQty, double percentOff, double expectedTotal) {
+                var checkoutManager = SetupAndScan(C_DefaultItem, C_DefaultUnitPrice, qualifiedQty + discountedQty);
+                checkoutManager.SetSpecial(new BuyXGetYAtZPercentOffSpecial(qualifiedQty, discountedQty, percentOff));
+                Assert.AreEqual(expectedTotal, checkoutManager.GetTotalPrice());
             }
         }
 

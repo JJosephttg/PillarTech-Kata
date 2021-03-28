@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using System;
 
 namespace CheckoutOrderTotalLib {
-   /* Expected API Calls:
-    * SetProductUnitPrice(item, price)
-    * SetMarkDown(item, unitpriceAmtTakenOff)
-    * SetSpecial(item, specialType, limitAmt)
-    * ScanItem(item, weight = 1)
-    * GetTotalPrice()
-    * RemoveProduct(item)
-    */
     public class CheckoutOrderManager {
         // Separate checkout from price config for efficiency purposes when calculating total (Think about the 1000's of inventory a store has but how little a customer actually orders)
         Dictionary<string, GroceryItem> _groceryPriceMap = new Dictionary<string, GroceryItem>();
