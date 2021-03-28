@@ -6,7 +6,6 @@ namespace CheckoutOrderTotalTests {
     public class CheckoutManagerTests {
 
         private const string C_DefaultItem = "Can of Hello World Beans";
-        private CheckoutOrderManager _checkoutManager;
 
         [TestFixture]
         public class AddItemTests : CheckoutManagerTests {            
@@ -74,13 +73,17 @@ namespace CheckoutOrderTotalTests {
             }
 
             [Test]
-            [TestCase(-1)]
-            [TestCase(-5.23)]
-            [TestCase(-.01)]
-            [TestCase(-1928.84)]
-            [TestCase(double.NegativeInfinity)]
-            public void SettingNegativeMarkdownThrowsException(double markdownPrice) {
-                var checkoutManager = SetupAndScan(C_DefaultItem, 5);
+            [TestCase(5, -1)]
+            [TestCase(6, -5.23)]
+            [TestCase(2.8, -.01)]
+            [TestCase(1, -1928.84)]
+            [TestCase(9.43, double.NegativeInfinity)]
+            [TestCase(1, 20)]
+            [TestCase(7.34, 8.12)]
+            [TestCase(0.01, 0.02)]
+            [TestCase(19283.23, 99999.43)]
+            public void SettingInvalidMarkdownThrowsException(double originPrice, double markdownPrice) {
+                var checkoutManager = SetupAndScan(C_DefaultItem, originPrice);
                 var exception = Assert.Throws<ArgumentOutOfRangeException>(() => checkoutManager.SetMarkdown(C_DefaultItem, markdownPrice));
                 Assert.AreEqual(exception.ParamName, "markdown");
             }
