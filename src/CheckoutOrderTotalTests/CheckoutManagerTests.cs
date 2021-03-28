@@ -111,7 +111,7 @@ namespace CheckoutOrderTotalTests {
             [TestCase(2, 1, 50, 125)]
             public void BuyXGetYAtZPercentOffSpecialReflectsCorrectTotal(double qualifiedQty, double discountedQty, double percentOff, double expectedTotal) {
                 var checkoutManager = SetupAndScan(C_DefaultItem, C_DefaultUnitPrice, qualifiedQty + discountedQty);
-                checkoutManager.SetSpecial(new BuyXGetYAtZPercentOffSpecial(qualifiedQty, discountedQty, percentOff));
+                checkoutManager.SetSpecial(C_DefaultItem, new BuyXGetYAtZPercentOffSpecial(qualifiedQty, discountedQty, percentOff));
                 Assert.AreEqual(expectedTotal, checkoutManager.GetTotalPrice());
             }
         }
