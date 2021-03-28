@@ -32,12 +32,13 @@ namespace CheckoutOrderTotalLib {
         /// <param name="itemId">Grocery item identifier</param>
         /// <param name="markdown">price of markdown (How much to take off of price)</param>
         /// <returns>True if markdown is set and false if the item base price has not been configured yet</returns>
-        public bool SetMarkdown(string itemId, double markdown) {
-            if (!_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) return false;
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if markdown is greater than unit price or is a negative number</exception>
+        /// <exception cref="System.ArgumentException">Thrown if item ID has not been configured yet via the AddItem method</exception>
+        public void SetMarkdown(string itemId, double markdown) {
+            if (!_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) throw new ArgumentException("Item ID not found in inventory. Make sure that you add the item first with AddItem", "itemId");
             if (markdown < 0 || markdown >= groceryItem.UnitPrice) throw new ArgumentOutOfRangeException("markdown", "Markdown must be a positive number and less than unit price of item being marked down");
             
             groceryItem.MarkDownPrice = markdown;
-            return true;
         }
 
         /// <summary>

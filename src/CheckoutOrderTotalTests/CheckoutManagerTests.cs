@@ -84,8 +84,20 @@ namespace CheckoutOrderTotalTests {
             [TestCase(19283.23, 99999.43)]
             public void SettingInvalidMarkdownThrowsException(double originPrice, double markdownPrice) {
                 var checkoutManager = SetupAndScan(C_DefaultItem, originPrice);
-                var exception = Assert.Throws<ArgumentOutOfRangeException>(() => checkoutManager.SetMarkdown(C_DefaultItem, markdownPrice));
-                Assert.AreEqual(exception.ParamName, "markdown");
+                AssertExceptionParam<ArgumentOutOfRangeException>(() => checkoutManager.SetMarkdown(C_DefaultItem, markdownPrice), "markdown");
+            }
+
+            [Test]
+            [TestCase("Hello")]
+            [TestCase("Green Beans")]
+            [TestCase("")]
+            public void SettingMarkdownOnNonConfiguredItemThrowsException(string itemId) {
+                AssertExceptionParam<ArgumentException>(() => new CheckoutOrderManager().SetMarkdown(itemId, 5.23), "itemId");
+            }
+
+            private void AssertExceptionParam<T>(TestDelegate method, string paramName) where T : ArgumentException {
+                var exception = Assert.Throws<T>(method);
+                Assert.AreEqual(exception.ParamName, paramName);
             }
         }
 
