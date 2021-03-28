@@ -18,6 +18,7 @@ namespace CheckoutOrderTotalLib {
             groceryItem.UnitPrice = price;
         }
 
+        #region Discounting
         /// <summary>
         /// Sets a markdown of an existing grocery item
         /// </summary>
@@ -33,6 +34,12 @@ namespace CheckoutOrderTotalLib {
             groceryItem.MarkDownPrice = markdown;
         }
 
+        public void SetSpecial(string itemId, ISpecial special = null) {
+            if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) groceryItem.CurrentSpecial = special;
+        }
+        #endregion
+
+        #region Scanning
         /// <summary>
         /// Adds grocery item and quantity to checkout
         /// </summary>
@@ -56,11 +63,12 @@ namespace CheckoutOrderTotalLib {
         public void RemoveScannedItem(string itemId) {
             if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) _checkoutOrder.Remove(groceryItem);
         }
+        #endregion
 
         /// <summary>
         /// Calculates total pre-tax price of all current checkout items
         /// </summary>
         /// <returns>Total pre-tax price of current checkout items</returns>
-        public double GetTotalPrice() => _checkoutOrder.Sum(x => x.GetAdjustedPrice());
+        public double GetTotalPrice() => _checkoutOrder.Sum(x => x.GetTotalPrice());
     }
 }
