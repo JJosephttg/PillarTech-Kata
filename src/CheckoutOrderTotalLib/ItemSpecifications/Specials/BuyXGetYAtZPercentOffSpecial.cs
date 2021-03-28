@@ -1,10 +1,13 @@
 ﻿namespace CheckoutOrderTotalLib {
     public class BuyXGetYAtZPercentOffSpecial : ISpecial {
         double _qualifiedQty, _discountedQty, _percentOff;
-        public BuyXGetYAtZPercentOffSpecial(double qualifiedQty, double discountedQty, double percentOff) {
+        int _limit;
+
+        public BuyXGetYAtZPercentOffSpecial(double qualifiedQty, double discountedQty, double percentOff, int limit = 1) {
             _qualifiedQty = qualifiedQty;
             _discountedQty = discountedQty;
             _percentOff = percentOff;
+            _limit = limit;
         }
 
         //How special works:
@@ -17,12 +20,13 @@
         //Add to total the qualified items and discounted quantity
         SpecialResult ISpecial.Apply(GroceryItem groceryItem) {
             double qtyLeft = groceryItem.OrderQuantity, total = 0;
-            for (double discountQtyLeft; (discountQtyLeft = qtyLeft - _qualifiedQty) > 0;) {
-                var adjustedPrice = groceryItem.GetAdjustedPrice();
+            int limit = 0;
+            var adjustedPrice = groceryItem.GetAdjustedPrice();
+            for (double discountQtyLeft; (discountQtyLeft = qtyLeft - _qualifiedQty) > 0 && limit < _limit; limit++) {
                 var discountQtyToApply = discountQtyLeft > _discountedQty ? _discountedQty : discountQtyLeft;
 
                 total += (_qualifiedQty * adjustedPrice) + (discountQtyToApply * adjustedPrice * (1 - (_percentOff * .01)));
-                qtyLeft = groceryItem.OrderQuantity - (_qualifiedQty + discountQtyToApply);
+                qtyLeft -= _qualifiedQty + discountQtyToApply;
             }
             return new SpecialResult(total, qtyLeft);
         }
