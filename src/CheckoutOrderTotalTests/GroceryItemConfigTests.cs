@@ -32,6 +32,7 @@ namespace CheckoutOrderTotalTests {
             public void ConfiguringItemWithInvalidQuantityDoesNotScanItem(double qty) {
                 var checkoutManager = SetupCheckoutManager(C_DefaultItem, 5);
                 Assert.False(checkoutManager.ScanItem(C_DefaultItem, qty));
+                Assert.AreEqual(0, checkoutManager.GetTotalPrice());
             }
         }
 
