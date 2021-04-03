@@ -4,6 +4,13 @@
         readonly int _limit;
 
         public BuyXGetYAtZPercentOffSpecial(double qualifiedQty, double discountedQty, double percentOff, int limit = 1) {
+            var percentOffName = nameof(percentOff);
+            InputChecker.CheckBadInput(qualifiedQty, nameof(qualifiedQty));
+            InputChecker.CheckBadInput(discountedQty, nameof(discountedQty));
+            InputChecker.CheckBadInput(percentOff, percentOffName);
+            InputChecker.CheckBadInput(limit, nameof(limit));
+            if (percentOff > 100) InputChecker.ThrowOutOfRange(percentOffName, $"{percentOffName} must be a valid percentage");
+
             _qualifiedQty = qualifiedQty;
             _discountedQty = discountedQty;
             _percentOff = percentOff;

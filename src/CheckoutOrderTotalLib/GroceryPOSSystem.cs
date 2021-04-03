@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CheckoutOrderTotalLib {
+﻿namespace CheckoutOrderTotalLib {
     public class GroceryPOSSystem {
         // Separate checkout from price config for efficiency purposes when calculating total (Think about the 1000's of inventory a store has but how little a customer actually orders)
         readonly GroceryItemScanner _scanner = new GroceryItemScanner();
@@ -11,9 +9,9 @@ namespace CheckoutOrderTotalLib {
         /// </summary>
         /// <param name="itemId">Grocery item identifier</param>
         /// <param name="price">Base unit price</param>
-        public void AddScannableItem(string itemId, double price) {
-            ThrowIfNotValidInputNumber(price, "unitPrice", "Unit price");
-            _inventoryManager.AddProduct(itemId, price);
+        public void AddScannableItem(string itemId, double unitPrice) {
+            InputChecker.CheckBadInput(unitPrice, nameof(unitPrice));
+            _inventoryManager.AddProduct(itemId, unitPrice);
         }
 
         #region Configuration
@@ -43,7 +41,7 @@ namespace CheckoutOrderTotalLib {
         /// <param name="weightOrQty">weight or quantity to add</param>
         /// <returns>True if item is scanned, and false if item is not a valid/configured grocery item. Items can be configured beforehand with the SetProductUnitPrice method</returns>
         public bool ScanItem(string itemId, double weightOrQty = 1) {
-            ThrowIfNotValidInputNumber(weightOrQty, "weightOrQty", "Weight/Quantity");
+            InputChecker.CheckBadInput(weightOrQty, nameof(weightOrQty));
             return _inventoryManager.PerformWorkIfItemExists(itemId, gItem => _scanner.ScanItem(gItem, weightOrQty));
         }
 
@@ -61,9 +59,5 @@ namespace CheckoutOrderTotalLib {
         /// </summary>
         /// <returns>Total pre-tax price of current checkout items</returns>
         public double GetTotalPrice() => _scanner.GetPreTaxTotal();
-
-        private void ThrowIfNotValidInputNumber(double num, string paramName, string quantifier) {
-            if (num <= 0 || !double.IsFinite(num)) throw new ArgumentOutOfRangeException(paramName, quantifier + " must be finite and be greater than 0"); 
-        }
     }
 }
