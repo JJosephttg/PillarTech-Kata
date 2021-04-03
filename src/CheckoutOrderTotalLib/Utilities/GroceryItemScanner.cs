@@ -7,7 +7,6 @@ namespace CheckoutOrderTotalLib {
         readonly HashSet<GroceryItem> _checkoutOrder = new HashSet<GroceryItem>();
 
         public void ScanItem(GroceryItem groceryItem, double weightOrQty) {
-            if (weightOrQty <= 0 || !double.IsFinite(weightOrQty)) throw new ArgumentOutOfRangeException("weightOrQty", "Weight/Quantity must be finite and be greater than 0");
             _checkoutOrder.Add(groceryItem);
             groceryItem.OrderQuantity += weightOrQty;
         }

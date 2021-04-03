@@ -1,4 +1,6 @@
-﻿namespace CheckoutOrderTotalLib {
+﻿using System;
+
+namespace CheckoutOrderTotalLib {
     public class GroceryPOSSystem {
         // Separate checkout from price config for efficiency purposes when calculating total (Think about the 1000's of inventory a store has but how little a customer actually orders)
         readonly GroceryItemScanner _scanner = new GroceryItemScanner();
@@ -9,9 +11,12 @@
         /// </summary>
         /// <param name="itemId">Grocery item identifier</param>
         /// <param name="price">Base unit price</param>
-        public void AddScannableItem(string itemId, double price) => _inventoryManager.AddProduct(itemId, price);
+        public void AddScannableItem(string itemId, double price) {
+            ThrowIfNotValidInputNumber(price, "unitPrice", "Unit price");
+            _inventoryManager.AddProduct(itemId, price);
+        }
 
-        #region Discounting
+        #region Configuration
         /// <summary>
         /// Sets a markdown of an existing grocery item
         /// </summary>
@@ -38,6 +43,7 @@
         /// <param name="weightOrQty">weight or quantity to add</param>
         /// <returns>True if item is scanned, and false if item is not a valid/configured grocery item. Items can be configured beforehand with the SetProductUnitPrice method</returns>
         public bool ScanItem(string itemId, double weightOrQty = 1) {
+            ThrowIfNotValidInputNumber(weightOrQty, "weightOrQty", "Weight/Quantity");
             return _inventoryManager.PerformWorkIfItemExists(itemId, gItem => _scanner.ScanItem(gItem, weightOrQty));
         }
 
@@ -55,5 +61,9 @@
         /// </summary>
         /// <returns>Total pre-tax price of current checkout items</returns>
         public double GetTotalPrice() => _scanner.GetPreTaxTotal();
+
+        private void ThrowIfNotValidInputNumber(double num, string paramName, string quantifier) {
+            if (num <= 0 || !double.IsFinite(num)) throw new ArgumentOutOfRangeException(paramName, quantifier + " must be finite and be greater than 0"); 
+        }
     }
 }
