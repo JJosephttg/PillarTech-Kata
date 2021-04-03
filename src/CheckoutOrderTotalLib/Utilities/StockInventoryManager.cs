@@ -15,10 +15,12 @@ namespace CheckoutOrderTotalLib {
                     if (markdown < 0 || markdown >= groceryItem.UnitPrice) throw new ArgumentOutOfRangeException("markdown", "Markdown must be a positive number and less than unit price of item being marked down");
                     groceryItem.MarkDownPrice = markdown;
                 })
-            ) throw new ArgumentException("Item ID not found in inventory. Make sure that you add the item first with AddItem", "itemId");
+            ) ThrowItemNotFound();
         }
 
-        public void ConfigureSpecial(string itemId, SpecialBase special) => PerformWorkIfItemExists(itemId, groceryItem => groceryItem.CurrentSpecial = special);
+        public void ConfigureSpecial(string itemId, SpecialBase special) {
+            if (!PerformWorkIfItemExists(itemId, groceryItem => groceryItem.CurrentSpecial = special)) ThrowItemNotFound(); 
+        }
 
         public bool PerformWorkIfItemExists(string itemId, Action<GroceryItem> work) {
             if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) {
@@ -27,5 +29,7 @@ namespace CheckoutOrderTotalLib {
             }
             return false;
         }
+
+        private void ThrowItemNotFound() => throw new ArgumentException("Item ID not found in inventory. Make sure that you add the item first with AddItem", "itemId");
     }
 }

@@ -84,6 +84,9 @@ namespace CheckoutOrderTotalTests {
                 checkoutManager.SetSpecial(C_DefaultItem, new BuyXGetYAtZPercentOffSpecial(qualifiedQty, discountedQty, percentOff));
                 Assert.AreEqual(expectedTotal, checkoutManager.GetTotalPrice());
             }
+
+            [Test]
+            public void SettingSpecialOnNonConfiguredItemThrowsException() => AssertExceptionParam<ArgumentException>(() => new GroceryPOSSystem().SetSpecial(C_DefaultItem, new NForXSpecial(1, 1)), "itemId");
         }
     }
 }

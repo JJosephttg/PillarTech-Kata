@@ -30,6 +30,7 @@
         /// </summary>
         /// <param name="itemId">Grocery item identifier</param>
         /// <param name="special">The type of special that is to be used with the grocery item</param>
+        /// /// <exception cref="System.ArgumentException">Thrown if item ID has not been configured yet via the AddItem method</exception>
         public void SetSpecial(string itemId, SpecialBase special = null) => _inventoryManager.ConfigureSpecial(itemId, special);
         #endregion
 
@@ -40,6 +41,7 @@
         /// <param name="itemId">Grocery item identifier</param>
         /// <param name="weightOrQty">weight or quantity to add</param>
         /// <returns>True if item is scanned, and false if item is not a valid/configured grocery item. Items can be configured beforehand with the SetProductUnitPrice method</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if weight/quantity is 0/negative/nonfinite</exception>
         public bool ScanItem(string itemId, double weightOrQty = 1) {
             InputChecker.CheckBadInput(weightOrQty, nameof(weightOrQty));
             return _inventoryManager.PerformWorkIfItemExists(itemId, gItem => _scanner.ScanItem(gItem, weightOrQty));
@@ -49,9 +51,7 @@
         /// Removes grocery item from checkout
         /// </summary>
         /// <param name="itemId">Grocery item identifier</param>
-        public void RemoveScannedItem(string itemId) {
-            _inventoryManager.PerformWorkIfItemExists(itemId, groceryItem => _scanner.RemoveItem(groceryItem));
-        }
+        public void RemoveScannedItem(string itemId) => _inventoryManager.PerformWorkIfItemExists(itemId, groceryItem => _scanner.RemoveItem(groceryItem));
         #endregion
 
         /// <summary>

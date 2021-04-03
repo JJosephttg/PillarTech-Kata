@@ -12,14 +12,6 @@
             _percentOff = percentOff;
         }
 
-        //How special works:
-        //If quantity ordered doesn't meet necessary quantity (X), special won't be applied
-        //Quantity up to qualified amount is going to be at normal/marked down price
-        //Quantity up to discounted quantity after qualified amount gets special discounted price;
-
-        //while qualified items left (X items remaining?) (and optionally limit)
-        //get up to next 2 discounted Y items (If discounted item count > _discountQty, use _discountQty)
-        //Add to total the qualified items and discounted quantity
         internal override SpecialResult Apply(GroceryItem groceryItem) {
             double qtyLeft = groceryItem.OrderQuantity, total = 0;
             int limit = 0;
