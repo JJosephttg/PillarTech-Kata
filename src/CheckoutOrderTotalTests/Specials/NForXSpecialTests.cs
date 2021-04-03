@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using CheckoutOrderTotalLib;
+using NUnit.Framework;
 
 namespace CheckoutOrderTotalTests {
     public class NForXSpecialTests : GroceryPOSSystemTestBase {
