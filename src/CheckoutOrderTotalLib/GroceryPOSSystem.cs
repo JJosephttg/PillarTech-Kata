@@ -1,8 +1,8 @@
 ﻿namespace CheckoutOrderTotalLib {
     public class GroceryPOSSystem {
         // Separate checkout from price config for efficiency purposes when calculating total (Think about the 1000's of inventory a store has but how little a customer actually orders)
-        GroceryItemScanner _scanner = new GroceryItemScanner();
-        StockInventoryManager _inventoryManager = new StockInventoryManager();
+        readonly GroceryItemScanner _scanner = new GroceryItemScanner();
+        readonly StockInventoryManager _inventoryManager = new StockInventoryManager();
 
         /// <summary>
         /// Adds specified identifier to scannable items using the base price

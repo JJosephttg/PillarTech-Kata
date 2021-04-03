@@ -1,7 +1,7 @@
 ﻿namespace CheckoutOrderTotalLib {
     public class BuyXGetYAtZPercentOffSpecial : ISpecial {
-        double _qualifiedQty, _discountedQty, _percentOff;
-        int _limit;
+        readonly double _qualifiedQty, _discountedQty, _percentOff;
+        readonly int _limit;
 
         public BuyXGetYAtZPercentOffSpecial(double qualifiedQty, double discountedQty, double percentOff, int limit = 1) {
             _qualifiedQty = qualifiedQty;
