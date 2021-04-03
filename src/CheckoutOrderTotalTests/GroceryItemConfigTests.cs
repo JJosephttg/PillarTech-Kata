@@ -21,6 +21,18 @@ namespace CheckoutOrderTotalTests {
 
                 Assert.AreEqual(unitPrice * weight, checkoutManager.GetTotalPrice());
             }
+
+            [Test]
+            [TestCase(0)]
+            [TestCase(-1)]
+            [TestCase(-3.23)]
+            [TestCase(-.0001)]
+            [TestCase(double.NegativeInfinity)]
+            [TestCase(double.PositiveInfinity)]
+            public void ConfiguringItemWithInvalidQuantityDoesNotScanItem(double qty) {
+                var checkoutManager = SetupCheckoutManager(C_DefaultItem, 5);
+                Assert.False(checkoutManager.ScanItem(C_DefaultItem, qty));
+            }
         }
 
         [TestFixture]
