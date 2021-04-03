@@ -31,7 +31,7 @@ namespace CheckoutOrderTotalTests {
             [TestCase(double.PositiveInfinity)]
             public void ConfiguringItemWithInvalidQuantityDoesNotScanItem(double qty) {
                 var checkoutManager = SetupCheckoutManager(C_DefaultItem, 5);
-                Assert.False(checkoutManager.ScanItem(C_DefaultItem, qty));
+                AssertExceptionParam<ArgumentOutOfRangeException>(() => checkoutManager.ScanItem(C_DefaultItem, qty), "weightOrQty");
                 Assert.AreEqual(0, checkoutManager.GetTotalPrice());
             }
         }
@@ -68,11 +68,6 @@ namespace CheckoutOrderTotalTests {
             [TestCase("")]
             public void SettingMarkdownOnNonConfiguredItemThrowsException(string itemId) {
                 AssertExceptionParam<ArgumentException>(() => new GroceryPOSSystem().SetMarkdown(itemId, 5.23), "itemId");
-            }
-
-            private void AssertExceptionParam<T>(TestDelegate method, string paramName) where T : ArgumentException {
-                var exception = Assert.Throws<T>(method);
-                Assert.AreEqual(exception.ParamName, paramName);
             }
         }
 
