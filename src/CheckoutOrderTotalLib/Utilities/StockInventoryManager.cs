@@ -18,7 +18,7 @@ namespace CheckoutOrderTotalLib {
             ) throw new ArgumentException("Item ID not found in inventory. Make sure that you add the item first with AddItem", "itemId");
         }
 
-        public void ConfigureSpecial(string itemId, ISpecial special) => PerformWorkIfItemExists(itemId, groceryItem => groceryItem.CurrentSpecial = special);
+        public void ConfigureSpecial(string itemId, SpecialBase special) => PerformWorkIfItemExists(itemId, groceryItem => groceryItem.CurrentSpecial = special);
 
         public bool PerformWorkIfItemExists(string itemId, Action<GroceryItem> work) {
             if (_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) {

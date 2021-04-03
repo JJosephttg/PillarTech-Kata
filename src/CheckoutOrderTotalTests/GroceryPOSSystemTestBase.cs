@@ -20,7 +20,7 @@ namespace CheckoutOrderTotalTests {
             return checkoutManager;
         }
 
-        protected void SetupAndValidateSpecial(Func<ISpecial> specGen, string paramName) {
+        protected void SetupAndValidateSpecial(Func<SpecialBase> specGen, string paramName) {
             var checkoutManager = SetupAndScan(C_DefaultItem, C_DefaultUnitPrice);
             AssertExceptionParam<ArgumentOutOfRangeException>(() => checkoutManager.SetSpecial(C_DefaultItem, specGen()), paramName);
         }

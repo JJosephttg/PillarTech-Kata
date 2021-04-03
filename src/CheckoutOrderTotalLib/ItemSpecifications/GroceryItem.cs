@@ -3,7 +3,7 @@
         public double UnitPrice { get; set; }
         public double MarkDownPrice { get; set; }
         public double OrderQuantity { get; set; }
-        public ISpecial CurrentSpecial { get; set; }
+        public SpecialBase CurrentSpecial { get; set; }
 
         public double GetAdjustedPrice() => UnitPrice - MarkDownPrice;
         public double GetTotalPrice() {

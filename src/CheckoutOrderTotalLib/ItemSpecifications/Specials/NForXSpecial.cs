@@ -1,14 +1,12 @@
 ﻿namespace CheckoutOrderTotalLib {
-    public class NForXSpecial : ISpecial {
-        readonly double _qualifiedQty, _discountPrice;
-        readonly int _limit;
-        public NForXSpecial(double qualifiedQty, double discountPrice, int limit = 1) {
-            _qualifiedQty = qualifiedQty;
+    public class NForXSpecial : SpecialBase {
+        readonly double _discountPrice;
+        public NForXSpecial(double qualifiedQty, double discountPrice, int limit = 1) : base(qualifiedQty, limit) {
+            InputChecker.CheckBadInput(discountPrice, nameof(discountPrice));
             _discountPrice = discountPrice;
-            _limit = limit;
         }
 
-        SpecialResult ISpecial.Apply(GroceryItem groceryItem) {
+        internal override SpecialResult Apply(GroceryItem groceryItem) {
             double totalQtyLeft = groceryItem.OrderQuantity, total = 0;
 
             for (int limit = 0; totalQtyLeft - _qualifiedQty >= 0 && limit < _limit; limit++) {

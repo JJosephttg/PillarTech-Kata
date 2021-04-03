@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="itemId">Grocery item identifier</param>
         /// <param name="special">The type of special that is to be used with the grocery item</param>
-        public void SetSpecial(string itemId, ISpecial special = null) => _inventoryManager.ConfigureSpecial(itemId, special);
+        public void SetSpecial(string itemId, SpecialBase special = null) => _inventoryManager.ConfigureSpecial(itemId, special);
         #endregion
 
         #region Scanning

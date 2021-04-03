@@ -1,20 +1,15 @@
 ﻿namespace CheckoutOrderTotalLib {
-    public class BuyXGetYAtZPercentOffSpecial : ISpecial {
-        readonly double _qualifiedQty, _discountedQty, _percentOff;
-        readonly int _limit;
+    public class BuyXGetYAtZPercentOffSpecial : SpecialBase {
+        readonly double _discountedQty, _percentOff;
 
-        public BuyXGetYAtZPercentOffSpecial(double qualifiedQty, double discountedQty, double percentOff, int limit = 1) {
+        public BuyXGetYAtZPercentOffSpecial(double qualifiedQty, double discountedQty, double percentOff, int limit = 1) : base(qualifiedQty, limit) {
             var percentOffName = nameof(percentOff);
-            InputChecker.CheckBadInput(qualifiedQty, nameof(qualifiedQty));
             InputChecker.CheckBadInput(discountedQty, nameof(discountedQty));
             InputChecker.CheckBadInput(percentOff, percentOffName);
-            InputChecker.CheckBadInput(limit, nameof(limit));
             if (percentOff > 100) InputChecker.ThrowOutOfRange(percentOffName, $"{percentOffName} must be a valid percentage");
 
-            _qualifiedQty = qualifiedQty;
             _discountedQty = discountedQty;
             _percentOff = percentOff;
-            _limit = limit;
         }
 
         //How special works:
@@ -25,7 +20,7 @@
         //while qualified items left (X items remaining?) (and optionally limit)
         //get up to next 2 discounted Y items (If discounted item count > _discountQty, use _discountQty)
         //Add to total the qualified items and discounted quantity
-        SpecialResult ISpecial.Apply(GroceryItem groceryItem) {
+        internal override SpecialResult Apply(GroceryItem groceryItem) {
             double qtyLeft = groceryItem.OrderQuantity, total = 0;
             int limit = 0;
             var adjustedPrice = groceryItem.GetAdjustedPrice();
