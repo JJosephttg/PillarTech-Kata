@@ -23,15 +23,18 @@ namespace CheckoutOrderTotalTests {
             }
 
             [Test]
-            [TestCase(0)]
-            [TestCase(-1)]
-            [TestCase(-3.23)]
-            [TestCase(-.0001)]
-            [TestCase(double.NegativeInfinity)]
-            [TestCase(double.PositiveInfinity)]
-            public void ConfiguringItemWithInvalidQuantityDoesNotScanItem(double qty) {
+            [TestCaseSource(nameof(InvalidNumbers))]
+            public void ConfiguringItemWithInvalidQuantityThrowsException(double qty) {
                 var checkoutManager = SetupCheckoutManager(C_DefaultItem, 5);
                 AssertExceptionParam<ArgumentOutOfRangeException>(() => checkoutManager.ScanItem(C_DefaultItem, qty), "weightOrQty");
+                Assert.AreEqual(0, checkoutManager.GetTotalPrice());
+            }
+
+            [Test]
+            [TestCaseSource(nameof(InvalidNumbers))]
+            public void ConfiguringItemWithInvalidPricingThrowsException(double price) {
+                var checkoutManager = new GroceryPOSSystem();
+                AssertExceptionParam<ArgumentOutOfRangeException>(() => checkoutManager.AddScannableItem(C_DefaultItem, price), "unitPrice");
                 Assert.AreEqual(0, checkoutManager.GetTotalPrice());
             }
         }

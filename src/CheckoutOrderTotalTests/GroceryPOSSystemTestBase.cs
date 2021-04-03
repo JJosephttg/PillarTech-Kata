@@ -25,5 +25,9 @@ namespace CheckoutOrderTotalTests {
             Assert.AreEqual(exception.ParamName, paramName);
         }
         #endregion
+
+        #region TestCaseSources
+        protected static double[] InvalidNumbers = new double[] { 0, -1, -3.23, -.0001, double.NegativeInfinity, double.PositiveInfinity };
+        #endregion
     }
 }
