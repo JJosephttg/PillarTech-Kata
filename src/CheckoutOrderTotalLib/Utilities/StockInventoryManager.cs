@@ -6,6 +6,7 @@ namespace CheckoutOrderTotalLib {
         readonly Dictionary<string, GroceryItem> _groceryPriceMap = new Dictionary<string, GroceryItem>();
 
         public void AddProduct(string itemId, double unitPrice) {
+            InputChecker.CheckBadInput(unitPrice, nameof(unitPrice));
             if (!_groceryPriceMap.TryGetValue(itemId, out GroceryItem groceryItem)) _groceryPriceMap.Add(itemId, groceryItem = new GroceryItem());
             groceryItem.UnitPrice = unitPrice;
         }

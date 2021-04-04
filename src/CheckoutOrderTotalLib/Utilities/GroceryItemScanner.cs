@@ -6,6 +6,7 @@ namespace CheckoutOrderTotalLib {
         readonly HashSet<GroceryItem> _checkoutOrder = new HashSet<GroceryItem>();
 
         public void ScanItem(GroceryItem groceryItem, double weightOrQty) {
+            InputChecker.CheckBadInput(weightOrQty, nameof(weightOrQty));
             _checkoutOrder.Add(groceryItem);
             groceryItem.OrderQuantity += weightOrQty;
         }
