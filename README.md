@@ -5,7 +5,14 @@ Checkout Order Total Kata - Done in C#
 
 ## Building/Running/Testing
 
+Prior requirements: Docker or VS 2019 with .NET Desktop Development Workload
 1. First, clone the repository to a path of your choosing
 
-Upon opening you will see a Requirements folder. This contains all the requirements that you will need in order to build the project with all of its dependencies. The current requirements are:
-- Visual Studio 2019 (Recommended for development, but the following workload/build tools are required to build: .NET desktop build tools workload - located in the vs_buildtools.exe application when prompted for workload/component options)
+### VS 2019 Users:
+Simply open the solution in VS and build either project. You can use the test explorer to run the tests for the solution
+
+### Docker users:
+1. Open the command line (PowerShell, CMD, etc...)
+2. cd into the directory of the repository with the Dockerfile
+3. Type ``` docker build -f "Dockerfile" -t "pillartechkata:latest" . ``` and hit enter to build the docker image which builds the solution
+4. Type ``` docker run pillartechkata:latest ``` and hit enter to run the tests
